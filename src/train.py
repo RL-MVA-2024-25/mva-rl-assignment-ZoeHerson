@@ -119,6 +119,7 @@ class ProjectAgent:
     def update_policy(self):
         #print(self.trajectories["log_probs"])
         states = torch.tensor(np.array(self.trajectories["states"]), dtype=torch.float32)
+        states = torch.tensor(self.trajectories["states"], dtype=torch.float32)
         actions = torch.tensor(np.array(self.trajectories["actions"]), dtype=torch.float32)
         log_probs_old = torch.tensor(np.array(self.trajectories["log_probs"])).detach()
         
@@ -127,6 +128,7 @@ class ProjectAgent:
         next_value = self.value_net.forward(next_state).item()
         returns, advantages = self.compute_returns_and_advantages(next_value)
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+        returns = (returns - returns.mean()) / (returns.std() + 1e-8)
 
         for _ in range(4):
             action_probs = self.policy_net(states)
