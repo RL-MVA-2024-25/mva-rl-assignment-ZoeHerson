@@ -1,6 +1,6 @@
 from gymnasium.wrappers import TimeLimit
 from env_hiv import HIVPatient
-from fast_env_py import FastHIVPatient
+#from fast_env_py import FastHIVPatient
 import numpy as np
 import torch
 import torch.nn as nn
@@ -189,6 +189,6 @@ class ProjectAgent:
 if __name__ == "__main__":
 
     agent = ProjectAgent()
-    agent.train_dqn(FastHIVPatient(), num_episodes=1000)
+    agent.train_dqn(HIVPatient(), num_episodes=1000)
 
 
