@@ -182,8 +182,7 @@ class ProjectAgent:
 
     def load(self):
           checkpoint = torch.load(self.save_path)
-          self.policy_net.load_state_dict(checkpoint['policy_network'])
-          self.value_net.load_state_dict(checkpoint['value_network'])
+          self.q_network.load_state_dict(checkpoint['dqn_network'])
 
 
 if __name__ == "__main__":
