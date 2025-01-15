@@ -16,31 +16,22 @@ env = TimeLimit(
 
 class Q_Network(nn.Module):
     def __init__(self, state_dim, action_dim, nb_neurons):
-        super().__init__()
-        self.mlp = nn.Sequential(
-            nn.Linear(state_dim, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, nb_neurons),
-            nn.ReLU(),
-            nn.Linear(nb_neurons, action_dim)
-        )
+        super(Q_Network, self).__init__()
+        self.hidden_size = nb_neurons
+        self.fc1 = nn.Linear(state_dim, self.hidden_size)
+        self.fc2 = nn.Linear(self.hidden_size, self.hidden_size)
+        self.fc3 = nn.Linear(self.hidden_size, self.hidden_size)
+        self.fc4 = nn.Linear(self.hidden_size, self.hidden_size)
+        self.fc5 = nn.Linear(self.hidden_size, self.hidden_size)
+        self.fc6 = nn.Linear(self.hidden_size, action_dim)
 
-        self.apply(self.init_weights)
-    
-    def init_weights(self, m):
-        if isinstance(m, nn.Linear):
-            nn.init.xavier_uniform_(m.weight)
-    
-    def forward(self, state):
-        return self.mlp(state)
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc3(x))
+        x = torch.relu(self.fc4(x))
+        x = torch.relu(self.fc5(x))
+        return self.fc6(x)
     
 class ReplayBuffer:
     def __init__(self, capacity):
@@ -88,7 +79,7 @@ class ProjectAgent:
         self.replay_buffer = ReplayBuffer(buffer_size)
         self.steps = 0
 
-        self.save_path = 'DQN_model_old.pth'
+        self.save_path = 'DQN_model_new.pth'
 
     def act(self, observation, use_random=False):
         """Epsilon-greedy action selection."""
