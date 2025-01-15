@@ -89,7 +89,7 @@ class ProjectAgent:
         self.replay_buffer = ReplayBuffer(buffer_size)
         self.steps = 0
 
-        self.save_path = 'DQN_model.pth'
+        self.save_path = 'DQN_model_old.pth'
 
     def act(self, observation, use_random=False):
         """Epsilon-greedy action selection."""
