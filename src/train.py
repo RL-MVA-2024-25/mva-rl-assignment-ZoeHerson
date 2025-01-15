@@ -83,10 +83,18 @@ class ProjectAgent:
 
     def act(self, observation, use_random=False):
         """Epsilon-greedy action selection."""
-        if random.random() < self.epsilon:
-            return random.randint(0, self.action_dim - 1)
+        if use_random:
+            if random.random() < self.epsilon:
+                return random.randint(0, self.action_dim - 1)
+            else:
+                state_tensor = torch.tensor(observation, dtype=torch.float32).unsqueeze(0).to(self.device)
+                #print(f"State tensor is {state_tensor}")
+                with torch.no_grad():
+                    q_values = self.q_network(state_tensor)
+                return torch.argmax(q_values).item()
         else:
-            state_tensor = torch.tensor(observation, dtype=torch.float32).unsqueeze(0)
+            state_tensor = torch.tensor(observation, dtype=torch.float32).unsqueeze(0).to(self.device)
+            #print(f"State tensor is {state_tensor}")
             with torch.no_grad():
                 q_values = self.q_network(state_tensor)
             return torch.argmax(q_values).item()
