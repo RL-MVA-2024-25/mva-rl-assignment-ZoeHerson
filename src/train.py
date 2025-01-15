@@ -68,6 +68,7 @@ class ProjectAgent:
         self.target_update_freq = target_update_freq
 
         self.nb_neurons = 512
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         # Q-network and target Q-network
         self.q_network = Q_Network(self.state_dim, self.action_dim, self.nb_neurons)
